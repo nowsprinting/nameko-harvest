@@ -55,6 +55,8 @@ def nameko_harvest(device, target):
     #food
     food_pos_x = [50, 140, 240, 340, 430]
     device.touch(int(dpiRatio[0]*food_pos_x[2]), int(dpiRatio[1]*670), 'DOWN_AND_UP')
+    MonkeyRunner.sleep(3)
+    device.touch(int(dpiRatio[0]*340), int(dpiRatio[1]*540), 'DOWN_AND_UP')
     MonkeyRunner.sleep(5)
     
     #exit
