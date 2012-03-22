@@ -46,10 +46,10 @@ def nameko_harvest(device, target):
     MonkeyRunner.sleep(5)
     
     #harvest
-    for y in [310,280,250]:
+    for y in [310,280,250,200]:
         dragStart   = (int(dpiRatio[0]*0), int(dpiRatio[1]*y))
         dragEnd     = (int(dpiRatio[0]*479), int(dpiRatio[1]*y))
-        device.drag(dragStart, dragEnd, 3.0, 10)
+        device.drag(dragStart, dragEnd, 2.0, 10)
         MonkeyRunner.sleep(2)
     
     #food
