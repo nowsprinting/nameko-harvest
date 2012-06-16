@@ -12,29 +12,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+    Nameko auto harvest script.
+"""
+__author__ = "Koji Hasegawa"
+__copyright__ = "Copyright 2012, Android Test and Evaluation Club."
+__credits__ = ["Koji Hasegawa"]
+__license__ = "Apache License Version 2.0"
+__version__ = "1.0"
 
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice, MonkeyImage
-
-# if running on Windows, set CURRENT_DIR_FOR_WIN value.
-CURRENT_DIR_FOR_WIN = None #'H:\\HUB_Products\\workspace_android\\testterMonkeyrunner\\'
-if CURRENT_DIR_FOR_WIN:
-    import sys
-    import os
-    sys.path.append(CURRENT_DIR_FOR_WIN)
-    os.chdir(CURRENT_DIR_FOR_WIN)
-    os.system("cd "+CURRENT_DIR_FOR_WIN)
-
+import unittest
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
 import monkeyutils
-
-
-if CURRENT_DIR_FOR_WIN:
-    monkeyutils.current_dir_for_win = CURRENT_DIR_FOR_WIN
 
 
 def nameko_harvest(device, target):
     testcase = __name__.encode('utf-8')
     dpiRatio = monkeyutils.get_dpi_ratio(device, 480, 800)
-    print '- ' + testcase + ' start!'
     
     # Launch application.
     runComponent = target['package_name'] + '/' + target['launch_activity']
@@ -71,20 +68,25 @@ target = {
     'launch_activity'   : '.AdMobActivity'
 }
 
-def main():
-    deviceIdList = monkeyutils.get_adb_devices()
-    if not deviceIdList:
-        print 'Connection device not found.'
-        return
-    
-    for deviceId in deviceIdList:
-        device = MonkeyRunner.waitForConnection(5, deviceId)
-        if device:
-            print "----\nConnect to " + monkeyutils.get_device_name(device)
-            nameko_harvest(device, target)
-            
-    print "----\n"
 
+class NamekoHarvest(unittest.TestCase):
+    
+    def test_nameko_harvest(self):
+        serial = os.environ.get("serial")
+        if serial:
+            deviceIdList = [serial]
+        else:
+            deviceIdList = monkeyutils.get_adb_devices()
+            if not deviceIdList:
+                fail('Can not get serial or device-id-list.')
+        
+        for deviceId in deviceIdList:
+            device = MonkeyRunner.waitForConnection(5, deviceId)
+            if device:
+                print "----\nConnect to " + monkeyutils.get_device_name(device)
+                nameko_harvest(device, target)
+            else:
+                fail('Does not got device.')
 
 if __name__ == '__main__':
-    main()
+    unittest.main()
