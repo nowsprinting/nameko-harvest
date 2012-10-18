@@ -43,6 +43,8 @@ $ monkeyrunner namekoharvest.py（フルパス）
 - Galaxy S II
 - Galaxy Nexus
 - ICONIA Tab A500
+- L-06D JOJO
+- Nexus 7
 
 
 ## monkeyrunnerについて
